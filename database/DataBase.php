@@ -25,4 +25,31 @@ class Database
             exit();
         }
     }
+    public function select($sql, $values = null)
+    {
+        try {
+            $stmt = $this->connection->prepare($sql);
+            if ($values == null) {
+                $stmt->execute();
+            } else {
+                $stmt->execute($values);
+            }
+            $result = $stmt;
+            return $result;
+        } catch (PDOException $e) {
+            echo $e->getMessage();
+            return false;
+        }
+    }
+    public function insert($tableName, $fields, $values)
+    {
+        try {
+            $stmt = $this->connection->prepare("insert into" . $tableName . "(" . implode(", ", $fields) . ",created_at) VALUES (:" . implode(', :', $fields) . ",now());");
+            $stmt->execute(array_combine($fields, $values));
+            return true;
+        } catch (PDOException $e) {
+            echo $e->getMessage();
+            return false;
+        }
+    }
 }
