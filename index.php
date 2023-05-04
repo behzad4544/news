@@ -9,6 +9,9 @@ define('DB_HOST', 'localhost');
 define('DB_NAME', 'news');
 define('DB_USERNAME', 'root');
 define('DB_PASSWORD', 'root');
+require "database/DataBase.php";
+
+$conn = new database\Database();
 
 // routing function
 function uri($reservedUrl, $class, $method, $requrestMethod = 'GET')
@@ -25,6 +28,7 @@ function uri($reservedUrl, $class, $method, $requrestMethod = 'GET')
     $reservedUrl = trim($reservedUrl, '/');
     $reservedUrlArray = explode('/', $reservedUrl);
     $reservedUrlArray = array_filter($reservedUrlArray);
+
     if (sizeof($currentUrlArray) != sizeof($reservedUrlArray) || methodField() != $requrestMethod) {
         return false;
     }
