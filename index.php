@@ -9,9 +9,13 @@ define('DB_HOST', 'localhost');
 define('DB_NAME', 'news');
 define('DB_USERNAME', 'root');
 define('DB_PASSWORD', 'root');
-require "database/DataBase.php";
 
-$conn = new database\Database();
+
+require_once 'database/DataBase.php';
+require_once 'database/CreateDB.php';
+$db = new database\Database();
+$db = new database\CreateDB();
+$db->run();
 
 // routing function
 function uri($reservedUrl, $class, $method, $requrestMethod = 'GET')

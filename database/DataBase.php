@@ -44,7 +44,7 @@ class Database
     public function insert($tableName, $fields, $values)
     {
         try {
-            $stmt = $this->connection->prepare("insert into" . $tableName . "(" . implode(", ", $fields) . ",created_at) VALUES (:" . implode(', :', $fields) . ",now());");
+            $stmt = $this->connection->prepare("insert into " . $tableName . "(" . implode(", ", $fields) . ",created_at) VALUES (:" . implode(', :', $fields) . ",now());");
             $stmt->execute(array_combine($fields, $values));
             return true;
         } catch (PDOException $e) {
@@ -80,6 +80,16 @@ class Database
         try {
             $stmt = $this->connection->prepare($sql);
             $stmt->execute([$id]);
+            return true;
+        } catch (PDOException $e) {
+            echo $e->getMessage();
+            return false;
+        }
+    }
+    public function createTable($sql)
+    {
+        try {
+            $this->connection->exec($sql);
             return true;
         } catch (PDOException $e) {
             echo $e->getMessage();
