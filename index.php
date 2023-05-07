@@ -1,41 +1,51 @@
 <?php
 
+//session start
 session_start();
 
-define('BATH_PATH', __DIR__);
-define('CURRENT_DOMAIN', currentdomain() . "/news/");
+
+//config
+define('BASE_PATH', __DIR__);
+define('CURRENT_DOMAIN', currentDomain() . '/project');
 define('DISPLAY_ERROR', true);
 define('DB_HOST', 'localhost');
 define('DB_NAME', 'news');
 define('DB_USERNAME', 'root');
 define('DB_PASSWORD', 'root');
 
-
 require_once 'database/DataBase.php';
 require_once 'database/CreateDB.php';
-$db = new database\Database();
-$db = new database\CreateDB();
-$db->run();
+require_once 'activities/Admin/Category.php';
 
-// routing function
-function uri($reservedUrl, $class, $method, $requrestMethod = 'GET')
+//create Database Table 
+// $db = new database\Database();
+// $db = new database\CreateDB();
+// $db->run();
+
+
+
+
+// uri('admin/category', 'Category', 'index');
+// uri('admin/category/store', 'Category', 'store', 'POST');
+function uri($reservedUrl, $class, $method, $requestMethod = 'GET')
 {
+
     //current url array
     $currentUrl = explode('?', currentUrl())[0];
-    dd($currentUrl);
     $currentUrl = str_replace(CURRENT_DOMAIN, '', $currentUrl);
     $currentUrl = trim($currentUrl, '/');
     $currentUrlArray = explode('/', $currentUrl);
     $currentUrlArray = array_filter($currentUrlArray);
 
-    //Reserved Url array
+    //reserved Url array
     $reservedUrl = trim($reservedUrl, '/');
     $reservedUrlArray = explode('/', $reservedUrl);
     $reservedUrlArray = array_filter($reservedUrlArray);
 
-    if (sizeof($currentUrlArray) != sizeof($reservedUrlArray) || methodField() != $requrestMethod) {
+    if (sizeof($currentUrlArray) != sizeof($reservedUrlArray) || methodField() != $requestMethod) {
         return false;
     }
+
     $parameters = [];
     for ($key = 0; $key < sizeof($currentUrlArray); $key++) {
         if ($reservedUrlArray[$key][0] == "{" && $reservedUrlArray[$key][strlen($reservedUrlArray[$key]) - 1] == "}") {
@@ -44,21 +54,30 @@ function uri($reservedUrl, $class, $method, $requrestMethod = 'GET')
             return false;
         }
     }
-    if (methodField() == "POST") {
+
+    if (methodField() == 'POST') {
         $request = isset($_FILES) ? array_merge($_POST, $_FILES) : $_POST;
         $parameters = array_merge([$request], $parameters);
     }
+
     $object = new $class;
     call_user_func_array(array($object, $method), $parameters);
     exit();
 }
+uri('admin/category', 'Admin\Category', 'index');
+
+// admin/category/edit/{id} reserved url
+// admin/category/delete/{id} reserved url
+// admin/category/edit/5 current url 
+// admin/category/edit/5 current url 
+// uri('admin/category', 'Category', 'index');
 
 
 //helpers
 
 function protocol()
 {
-    return stripos($_SERVER['SERVER_PROTOCOL'], "https") === true ? 'https://' : 'http://';
+    return  stripos($_SERVER['SERVER_PROTOCOL'], 'https') === true ? 'https://' : 'http://';
 }
 
 function currentDomain()
@@ -69,15 +88,17 @@ function currentDomain()
 
 function asset($src)
 {
-    $domain = trim(CURRENT_DOMAIN, "/ ");
-    $src = $domain . "/" . trim($src, '/');
+
+    $domain = trim(CURRENT_DOMAIN, '/ ');
+    $src = $domain . '/' . trim($src, '/');
     return $src;
 }
 
 function url($url)
 {
-    $domain = trim(CURRENT_DOMAIN, "/ ");
-    $url = $domain . "/" . trim($url, '/');
+
+    $domain = trim(CURRENT_DOMAIN, '/ ');
+    $url = $domain . '/' . trim($url, '/');
     return $url;
 }
 
@@ -93,6 +114,7 @@ function methodField()
 
 function displayError($displayError)
 {
+
     if ($displayError) {
         ini_set('display_errors', 1);
         ini_set('display_startup_errors', 1);
@@ -104,11 +126,15 @@ function displayError($displayError)
     }
 }
 
+displayError(DISPLAY_ERROR);
+
+
 global $flashMessage;
-if (isset($_SESSION['flash_Message'])) {
-    $flashMessage = $_SESSION['flash_Message'];
-    unset($_SESSION['flash_Message']);
+if (isset($_SESSION['flash_message'])) {
+    $flashMessage = $_SESSION['flash_message'];
+    unset($_SESSION['flash_message']);
 }
+
 
 function flash($name, $value = null)
 {
@@ -117,12 +143,34 @@ function flash($name, $value = null)
         $message = isset($flashMessage[$name]) ? $flashMessage[$name] : '';
         return $message;
     } else {
-        $_SESSION['flash_Message']['name'] = $value;
+        $_SESSION['flash_message'][$name] = $value;
     }
 }
+// flash('login_error', 'ورود با خطا مواجه شد');
+// flash('cart_success', 'محصول با موفقیت به سبد خرید شما اضافه شد');
+// echo flash('login_error');
+// echo flash('cart_success');
+
+
 function dd($var)
 {
-    echo "<pre>";
+    echo '<pre>';
     var_dump($var);
-    exit();
+    exit;
 }
+
+
+
+
+
+// category
+
+uri('admin/category', 'Admin\Category', 'index');
+uri('admin/category/create', 'Admin\Category', 'create');
+uri('admin/category/store', 'Admin\Category', 'store', 'POST');
+uri('admin/category/edit/{id}', 'Admin\Category', 'edit');
+uri('admin/category/update/{id}', 'Admin\Category', 'update', 'POST');
+uri('admin/category/delete/{id}', 'Admin\Category', 'delete');
+
+
+echo '404 - page not found';
