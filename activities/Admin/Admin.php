@@ -4,8 +4,8 @@ namespace Admin;
 
 class Admin
 {
-    // protected $currentDomain;
-    // protected $basePath;
+    protected $currentDomain;
+    protected $basePath;
 
     function __construct()
     {
