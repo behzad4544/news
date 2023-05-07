@@ -19,7 +19,6 @@ class Database
     {
         try {
             $this->connection = new PDO("mysql:host=" . $this->dbHost . ";dbname=" . $this->dbName, $this->dbUserName, $this->dbPassword, $this->option);
-            echo "ok";
         } catch (PDOException $e) {
             echo $e->getMessage();
             exit();

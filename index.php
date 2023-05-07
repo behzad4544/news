@@ -15,6 +15,7 @@ define('DB_PASSWORD', 'root');
 
 require_once 'database/DataBase.php';
 require_once 'database/CreateDB.php';
+require_once 'activities/Admin/Admin.php';
 require_once 'activities/Admin/Category.php';
 
 //create Database Table 
