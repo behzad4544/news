@@ -78,7 +78,7 @@ require_once(BASE_PATH . '/template/admin/layouts/header.php');
                             <?= ($post['selected'] == 2) ? 'remove selcted' : 'add selected' ?>
                         </a>
                         <hr class="my-1" />
-                        <a role="button" class="btn btn-sm btn-primary text-white" href="<?= url('') ?>">edit</a>
+                        <a role="button" class="btn btn-sm btn-primary text-white" href="<?= url('admin/post/edit/' . $post['id']) ?>">edit</a>
                         <a role="button" class="btn btn-sm btn-danger text-white" href="<?= url("admin/post/delete/" . $post['id']) ?>">delete</a>
                     </td>
                 </tr>
