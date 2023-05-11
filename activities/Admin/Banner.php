@@ -50,6 +50,8 @@ class Banner extends Admin
     public function delete($id)
     {
         $db = new Database();
+        $banner = $db->select("select * from banners WHERE `id` =?", [$id])->fetch();
+        $this->removeImage($banner['image']);
         $db->delete("banners", $id);
         $this->redirect("admin/banner");
     }

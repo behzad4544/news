@@ -21,9 +21,8 @@ require_once(BASE_PATH . '/template/admin/layouts/header.php');
                 <label for="cat_id">Category</label>
                 <select name="cat_id" id="cat_id" class="form-control" required autofocus>
                     <?php foreach ($categories as $category) : ?>
-                    <option value="<?= $category['id'] ?>"
-                        <?= ($post['cat_id'] == $category['id']) ? "selected" : "" ?>>
-                        <?= $category['name'] ?> </option>
+                        <option value="<?= $category['id'] ?>" <?= ($post['cat_id'] == $category['id']) ? "selected" : "" ?>>
+                            <?= $category['name'] ?> </option>
                     <?php endforeach ?>
                 </select>
             </div>
@@ -39,18 +38,16 @@ require_once(BASE_PATH . '/template/admin/layouts/header.php');
             <div class="form-group">
                 <label for="published_at">published at</label>
                 <input type="text" class="form-control d-none" id="published_at" name="published_at" required autofocus>
-                <input type="text" class="form-control" id="published_at_view" required autofocus>
+                <input type="text" class="form-control" id="published_at_view" value="<?= $post['published_at'] ?>" required autofocus>
             </div>
 
             <div class="form-group">
                 <label for="summary">summary</label>
-                <textarea class="form-control" id="summary" name="summary" placeholder="summary ..."
-                    rows="3"><?= $post['summary'] ?></textarea>
+                <textarea class="form-control" id="summary" name="summary" placeholder="summary ..." rows="3"><?= $post['summary'] ?></textarea>
             </div>
             <div class="form-group">
                 <label for="body">body</label>
-                <textarea class="form-control" id="body" name="body" placeholder="body ..."
-                    rows="5"><?= $post['body'] ?></textarea>
+                <textarea class="form-control" id="body" name="body" placeholder="body ..." rows="5"><?= $post['body'] ?></textarea>
             </div>
             <button type="submit" class="btn btn-primary btn-sm">update</button>
         </form>
