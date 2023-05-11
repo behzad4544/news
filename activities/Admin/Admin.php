@@ -17,7 +17,7 @@ class Admin
         header('Location:' . trim($this->currentDomain, '/ ') . '/' . trim($url, '/ '));
         exit;
     }
-    protected function redirectBack($url)
+    protected function redirectBack()
     {
         header('Location:' . $_SERVER['HTTP_REFERER']);
         exit;
@@ -45,7 +45,7 @@ class Admin
     }
     protected function removeImage($path)
     {
-        $path = trim($this->basePath, '/ ') . '/' . trim($path, '/ ');
+        $path = trim($path, '/ ');
         if (file_exists($path)) {
             unlink($path);
         }

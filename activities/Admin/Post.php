@@ -51,8 +51,45 @@ class Post extends Admin
     }
     public function delete($id)
     {
+
         $db = new Database();
-        $db->delete("categories", $id);
-        $this->redirect("admin/category");
+        $post = $db->select("select * from posts WHERE `id` =?", [$id])->fetch();
+        $this->removeImage($post['image']);
+        $db->delete("posts", $id);
+        $this->redirectBack();
+    }
+    public function selected($id)
+    {
+
+        $db = new Database();
+        $post = $db->select("select * from posts WHERE `id` =?", [$id])->fetch();
+        if (empty($post)) {
+            $this->redirectBack();
+        }
+        if ($post['selected'] == 1) {
+            $db->update('posts', $id, ['selected'], [2]);
+            $this->redirectBack();
+        } else {
+            $db->update('posts', $id, ['selected'], [1]);
+            $this->redirectBack();
+        }
+        $this->redirectBack();
+    }
+    public function breakingNews($id)
+    {
+
+        $db = new Database();
+        $post = $db->select("select * from posts WHERE `id` =?", [$id])->fetch();
+        if (empty($post)) {
+            $this->redirectBack();
+        }
+        if ($post['breaking_news'] == 1) {
+            $db->update('posts', $id, ['breaking_news'], [2]);
+            $this->redirectBack();
+        } else {
+            $db->update('posts', $id, ['breaking_news'], [1]);
+            $this->redirectBack();
+        }
+        $this->redirectBack();
     }
 }
