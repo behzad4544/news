@@ -20,11 +20,25 @@ require_once 'activities/Admin/Category.php';
 require_once 'activities/Admin/Post.php';
 require_once 'activities/Admin/Banner.php';
 require_once 'activities/Admin/User.php';
+require_once 'activities/Admin/Comment.php';
 
 //create Database Table 
 // $db = new database\Database();
 // $db = new database\CreateDB();
 // $db->run();
+
+spl_autoload_register(function ($className) {
+    $path = BASE_PATH . DIRECTORY_SEPARATOR . 'lib' . DIRECTORY_SEPARATOR;
+    $className = str_replace('\\', DIRECTORY_SEPARATOR, $className);
+    include $path . $className . '.php';
+});
+
+
+function jalaliData($date)
+{
+    return \Parsidev\Jalali\jDate::forge($date)->format('datetime');
+}
+// echo jalaliData('today');
 
 
 
@@ -203,6 +217,11 @@ uri('admin/user/edit/{id}', 'Admin\User', 'edit');
 uri('admin/user/update/{id}', 'Admin\User', 'update', 'POST');
 uri('admin/user/permission/{id}', 'Admin\User', 'permission');
 uri('admin/user/delete/{id}', 'Admin\User', 'delete');
+
+//comment
+
+uri('admin/comment', 'Admin\Comment', 'index');
+uri('admin/comment/change-status/{id}', 'Admin\Comment', 'changeStatus');
 
 
 echo '404 - page not found';
