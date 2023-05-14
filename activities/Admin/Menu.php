@@ -10,7 +10,7 @@ class Menu extends Admin
     public function index()
     {
         $db = new Database();
-        $menus = $db->select('SELECT * FROM menus ORDER BY `id` DESC');
+        $menus = $db->select('SELECT m1.*,m2.name AS parent_name FROM menus m1 left join menus m2 on m1.parent_id = m2.id ORDER BY `id` DESC');
         require_once(BASE_PATH . '/template/admin/menus/index.php');
     }
     public function create()
@@ -35,7 +35,7 @@ class Menu extends Admin
     public function update($request, $id)
     {
         $db = new Database();
-        $db->update("menus", $id, array_keys(array_filter($request)), array_filter($request));
+        $db->update("menus", $id, array_keys($request), $request);
         $this->redirect("admin/menu");
     }
     public function delete($id)
