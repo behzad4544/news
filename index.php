@@ -1,8 +1,11 @@
 <?php
 
+use Auth\Auth;
+
+
+
 //session start
 session_start();
-
 
 //config
 define('BASE_PATH', __DIR__);
@@ -12,6 +15,19 @@ define('DB_HOST', 'localhost');
 define('DB_NAME', 'news');
 define('DB_USERNAME', 'root');
 define('DB_PASSWORD', 'root');
+
+
+
+//mail
+
+define('MAIL_HOST', 'smtp.gmail.com');
+define('SMTP_AUTH', true);
+define('MAIL_USERNAME', 'php.behzad@gmail.com');
+define('MAIL_PASSWORD', 'ohuyrlluaaxxbgiy');
+define('MAIL_PORT', 587);
+define('SENDER_MAIL', 'php.behzad@gmail.com');
+define('SENDER_NAME', 'دوره آنلاین php جامع');
+
 
 require_once 'database/DataBase.php';
 require_once 'database/CreateDB.php';
@@ -24,6 +40,11 @@ require_once 'activities/Admin/Comment.php';
 require_once 'activities/Admin/Menu.php';
 require_once 'activities/Admin/Websetting.php';
 
+
+
+//Auth
+require_once 'activities/Auth/Auth.php';
+
 //create Database Table 
 // $db = new database\Database();
 // $db = new database\CreateDB();
@@ -34,6 +55,10 @@ spl_autoload_register(function ($className) {
     $className = str_replace('\\', DIRECTORY_SEPARATOR, $className);
     include $path . $className . '.php';
 });
+
+//email
+$auth = new Auth();
+$auth->sendMail("behzad.kermanii@gmail.com", 'test', '<p>test</p>');
 
 
 function jalaliData($date)
