@@ -22,6 +22,7 @@ require_once 'activities/Admin/Banner.php';
 require_once 'activities/Admin/User.php';
 require_once 'activities/Admin/Comment.php';
 require_once 'activities/Admin/Menu.php';
+require_once 'activities/Admin/Websetting.php';
 
 //create Database Table 
 // $db = new database\Database();
@@ -39,7 +40,6 @@ function jalaliData($date)
 {
     return \Parsidev\Jalali\jDate::forge($date)->format('datetime');
 }
-// echo jalaliData('today');
 
 
 
@@ -233,5 +233,10 @@ uri('admin/menu/edit/{id}', 'Admin\Menu', 'edit');
 uri('admin/menu/update/{id}', 'Admin\Menu', 'update', 'POST');
 uri('admin/menu/delete/{id}', 'Admin\Menu', 'delete');
 
+// setting
+
+uri('admin/websetting', 'Admin\Websetting', 'index');
+uri('admin/websetting/edit/{id}', 'Admin\Websetting', 'edit');
+uri('admin/websetting/update/{id}', 'Admin\Websetting', 'update', 'POST');
 
 echo '404 - page not found';
