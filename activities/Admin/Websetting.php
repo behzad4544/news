@@ -22,17 +22,22 @@ class Websetting extends Admin
     public function update($request, $id)
     {
         $db = new Database();
-        if ($request['logo']['tmp_name'] != null && $request['icon']['tmp_name'] != null) {
-            $setting = $db->select('SELECT * FROM setting WHERE `id` =?', [$id])->fetch();
-            $this->removeImage($setting['logo']);
-            $this->removeImage($setting['icon']);
-            $request['image'] = $this->saveImage($request['logo'], 'setting-image');
-            $request['image'] = $this->saveImage($request['icon'], 'setting-image');
+        $setting = $db->select('SELECT * FROM setting WHERE `id` =?', [$id])->fetch();
+        if ($request['logo']['tmp_name'] != '') {
+            $request['logo'] = $this->saveImage($request['logo'], 'setting-image', 'logo');
         } else {
             unset($request['logo']);
+        }
+        if ($request['icon']['tmp_name'] != '') {
+            $request['icon'] = $this->saveImage($request['icon'], 'setting-image', 'icon');
+        } else {
             unset($request['icon']);
         }
-        $db->update("setting", $id, array_keys($request), $request);
+        if (!empty($setting)) {
+            $db->update("setting", $id, array_keys($request), $request);
+        } else {
+            $db->insert("setting", array_keys($request), $request);
+        }
         $this->redirect("admin/websetting");
     }
 }
