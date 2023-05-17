@@ -269,6 +269,7 @@ uri('admin/websetting/update/{id}', 'Admin\Websetting', 'update', 'POST');
 
 uri('register', 'Auth\Auth', 'register');
 uri('register/store', 'Auth\Auth', 'registerStore', 'POST');
+uri('activation/{verify_token}', 'Auth\Auth', 'activation');
 
 
 echo '404 - page not found';

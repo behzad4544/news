@@ -34,11 +34,11 @@ class Auth
     }
     public function activationMessage($username, $verifyToken)
     {
-        $message = "
+        $message = '
         <h1> فعالسازی حساب کاربری </h1>
-        <p>" . $username . " عزیز برای فعالسازی حساب کاربری خود لطفا روی لینک زیر کلیک نمایید</p> 
-        <div><a href=''>فعالسازی حساب</a></div>
-        ";
+        <p>' . $username . ' عزیز برای فعالسازی حساب کاربری خود لطفا روی لینک زیر کلیک نمایید</p> 
+        <div><a href="' . url('activation/' . $verifyToken) . '">فعالسازی حساب</a></div>
+        ';
         return $message;
     }
 
@@ -114,6 +114,17 @@ class Auth
                     $this->redirectBack();
                 }
             }
+        }
+    }
+    public function activation($verifyToken)
+    {
+        $db = new Database();
+        $user = $db->select('select * from users where verify_token =? and is_active = 0; ', [$verifyToken])->fetch();
+        if ($user == null) {
+            $this->redirect('login');
+        } else {
+            $result = $db->update('users', $user['id'], ['is_active'], [1]);
+            $this->redirect('login');
         }
     }
 }
