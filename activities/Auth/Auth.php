@@ -127,4 +127,30 @@ class Auth
             $this->redirect('login');
         }
     }
+    public function login()
+    {
+        require_once(BASE_PATH . '/template/auth/login.php');
+    }
+    public function checkLogin($request)
+    {
+        if (empty($request['email']) || empty($request['password'])) {
+            flash('login_error', 'تمامی فیلدها اجباری می باشد.');
+            $this->redirectBack();
+        } else {
+            $db = new Database();
+            $user = $db->select('select * from users where email =? ', [$request['email']])->fetch();
+            if ($user != null) {
+                if (!password_verify($request['password'], $user['password']) && $user['is_active'] == 1) {
+                    flash('login_error', 'نام کاربری یا پسورد اشتباه می باشد');
+                    $this->redirectBack();
+                } else {
+                    $_SESSION['user'] = $user['id'];
+                    $this->redirect('admin');
+                }
+            } else {
+                flash('login_error', 'نام کاربری یا پسورد اشتباه می باشد');
+                $this->redirectBack();
+            }
+        }
+    }
 }
