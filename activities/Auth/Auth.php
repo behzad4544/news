@@ -26,6 +26,7 @@ class Auth
     private function hash($password)
     {
         $hashPassword = password_hash($password, PASSWORD_DEFAULT);
+        return $hashPassword;
     }
     private function random()
     {
@@ -69,9 +70,8 @@ class Auth
             $mail->Subject = $subject;
             $mail->Body = $body;
 
-            $result = $mail->send();
-            echo 'Message has been sent';
-            return $result;
+            $mail->send();
+            return true;
         } catch (Exception $e) {
             echo "Message could not be sent. Mailer Error: {$mail->ErrorInfo}";
             return false;
@@ -85,15 +85,20 @@ class Auth
     public function registerStore($request)
     {
         if (empty($request['email']) || empty($request['username']) || empty($request['password'])) {
+            flash('register_error', 'تمامی فیلدها اجباری می باشد.');
             $this->redirectBack();
         } else if (strlen($request['password']) < 8) {
+            flash('register_error', 'پسورد باید حداقل 9 کارکتر باشد');
+
             $this->redirectBack();
         } else if (!filter_var($request['email'], FILTER_VALIDATE_EMAIL)) {
+            flash('register_error', 'ایمیل صحیح وارد کنید');
             $this->redirectBack();
         } else {
             $db = new Database();
-            $user = $db->select('select * from users where email =?', $request['email'])->fetch();
+            $user = $db->select('select * from users where email =?', [$request['email']])->fetch();
             if ($user != null) {
+                flash('register_error', 'کاربر از قبل در سیستم وجود دارد');
                 $this->redirectBack();
             } else {
                 $randomToken = $this->random();
@@ -105,6 +110,7 @@ class Auth
                     $db->insert('users', array_keys($request), $request);
                     $this->redirect('login');
                 } else {
+                    flash('register_error', 'ایمیل ارسال نشد');
                     $this->redirectBack();
                 }
             }

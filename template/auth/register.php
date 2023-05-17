@@ -23,10 +23,13 @@ require_once(BASE_PATH . '/template/auth/layouts/head-tag.php');
                     <span class="login100-form-title">
                         Register
                     </span>
+                    <?php
+                    $message = flash('register_error');
+                    if (!empty($message)) : ?>
+                        <div class="mb-2 alert alert-danger"> <small class="form-text text-danger"><?= $message ?></small>
+                        </div>
 
-                    <div class="mb-2 alert alert-danger"> <small class="form-text text-danger">خطا</small> </div>
-
-
+                    <?php endif; ?>
 
                     <div class="wrap-input100 validate-input" data-validate="Valid email is required: ex@abc.xyz">
                         <input class="input100" type="text" name="username" placeholder="Username">
