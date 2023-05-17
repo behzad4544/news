@@ -57,8 +57,8 @@ spl_autoload_register(function ($className) {
 });
 
 //email
-$auth = new Auth();
-$auth->sendMail("behzad.kermanii@gmail.com", 'test', '<p>test</p>');
+// $auth = new Auth();
+// $auth->sendMail("behzad.kermanii@gmail.com", 'test', '<p>test</p>');
 
 
 function jalaliData($date)
@@ -263,5 +263,12 @@ uri('admin/menu/delete/{id}', 'Admin\Menu', 'delete');
 uri('admin/websetting', 'Admin\Websetting', 'index');
 uri('admin/websetting/edit/{id}', 'Admin\Websetting', 'edit');
 uri('admin/websetting/update/{id}', 'Admin\Websetting', 'update', 'POST');
+
+
+//Auth
+
+uri('register', 'Auth\Auth', 'register');
+uri('register/store', 'Auth\Auth', 'registerStore', 'POST');
+
 
 echo '404 - page not found';

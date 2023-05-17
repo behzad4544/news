@@ -2,9 +2,10 @@
 
 namespace Auth;
 
-use PHPMailer\PHPMailer\PHPMailer;
+use database\Database;
 use PHPMailer\PHPMailer\SMTP;
 use PHPMailer\PHPMailer\Exception;
+use PHPMailer\PHPMailer\PHPMailer;
 
 
 class Auth
@@ -26,8 +27,21 @@ class Auth
     {
         $hashPassword = password_hash($password, PASSWORD_DEFAULT);
     }
+    private function random()
+    {
+        return bin2hex(openssl_random_pseudo_bytes(32));
+    }
+    public function activationMessage($username, $verifyToken)
+    {
+        $message = "
+        <h1> فعالسازی حساب کاربری </h1>
+        <p>" . $username . " عزیز برای فعالسازی حساب کاربری خود لطفا روی لینک زیر کلیک نمایید</p> 
+        <div><a href=''>فعالسازی حساب</a></div>
+        ";
+        return $message;
+    }
 
-    public function sendMail($emailAddress, $subject, $body)
+    private function sendMail($emailAddress, $subject, $body)
     {
 
         //Create an instance; passing `true` enables exceptions
@@ -61,6 +75,39 @@ class Auth
         } catch (Exception $e) {
             echo "Message could not be sent. Mailer Error: {$mail->ErrorInfo}";
             return false;
+        }
+    }
+    public function register()
+    {
+        require_once(BASE_PATH . '/template/auth/register.php');
+    }
+
+    public function registerStore($request)
+    {
+        if (empty($request['email']) || empty($request['username']) || empty($request['password'])) {
+            $this->redirectBack();
+        } else if (strlen($request['password']) < 8) {
+            $this->redirectBack();
+        } else if (!filter_var($request['email'], FILTER_VALIDATE_EMAIL)) {
+            $this->redirectBack();
+        } else {
+            $db = new Database();
+            $user = $db->select('select * from users where email =?', $request['email'])->fetch();
+            if ($user != null) {
+                $this->redirectBack();
+            } else {
+                $randomToken = $this->random();
+                $activationMessage = $this->activationMessage($request['username'], $randomToken);
+                $result = $this->sendMail($request['email'], 'فالعسازی حساب کاربری', $activationMessage);
+                if ($result) {
+                    $request['verify_token'] = $randomToken;
+                    $request['password'] = $this->hash($request['password']);
+                    $db->insert('users', array_keys($request), $request);
+                    $this->redirect('login');
+                } else {
+                    $this->redirectBack();
+                }
+            }
         }
     }
 }
