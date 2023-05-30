@@ -32,6 +32,7 @@ define('SENDER_NAME', 'دوره آنلاین php جامع');
 require_once 'database/DataBase.php';
 require_once 'database/CreateDB.php';
 require_once 'activities/Admin/Admin.php';
+require_once 'activities/Admin/Dashboard.php';
 require_once 'activities/Admin/Category.php';
 require_once 'activities/Admin/Post.php';
 require_once 'activities/Admin/Banner.php';
@@ -205,7 +206,8 @@ function dd($var)
 
 
 
-
+//dashboard
+uri('admin', 'Admin\Dashboard', 'index');
 
 // category
 

@@ -24,8 +24,8 @@
                     <?php
                     $message = flash('register_error');
                     if (!empty($message)) : ?>
-                        <div class="mb-2 alert alert-danger"> <small class="form-text text-danger"><?= $message ?></small>
-                        </div>
+                    <div class="mb-2 alert alert-danger"> <small class="form-text text-danger"><?= $message ?></small>
+                    </div>
 
                     <?php endif; ?>
 
@@ -63,7 +63,7 @@
                         <span class="txt1">
                             Forgot
                         </span>
-                        <a class="txt2" href="#">
+                        <a class="txt2" href="<?= url('forgot') ?>">
                             Username / Password?
                         </a>
                     </div>

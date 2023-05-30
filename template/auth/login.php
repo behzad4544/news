@@ -25,8 +25,8 @@
                     <?php
                     $message = flash('login_error');
                     if (!empty($message)) : ?>
-                        <div class="mb-2 alert alert-danger"> <small class="form-text text-danger"><?= $message ?></small>
-                        </div>
+                    <div class="mb-2 alert alert-danger"> <small class="form-text text-danger"><?= $message ?></small>
+                    </div>
                     <?php endif; ?>
 
                     <div class="wrap-input100 validate-input" data-validate="Valid email is required: ex@abc.xyz">
@@ -55,7 +55,7 @@
                         <span class="txt1">
                             Forgot
                         </span>
-                        <a class="txt2" href="#">
+                        <a class="txt2" href="<?= url("forgot") ?>">
                             Username / Password?
                         </a>
                     </div>

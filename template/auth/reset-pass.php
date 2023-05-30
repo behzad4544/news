@@ -17,7 +17,8 @@
                     <img src="<?= url('public/auth/assets/images/img-01.png') ?>" alt="IMG">
                 </div>
 
-                <form method="post" action="<?= url('reset-password/' . $forgot_token) ?>" class="login100-form validate-form">
+                <form method="post" action="<?= url('reset-password/' . $forgot_token) ?>"
+                    class="login100-form validate-form">
                     <span class="login100-form-title">
                         Reset Password
                     </span>
@@ -25,8 +26,8 @@
                     <?php
                     $message = flash('reset_error');
                     if (!empty($message)) : ?>
-                        <div class="mb-2 alert alert-danger"> <small class="form-text text-danger"><?= $message ?></small>
-                        </div>
+                    <div class="mb-2 alert alert-danger"> <small class="form-text text-danger"><?= $message ?></small>
+                    </div>
                     <?php endif; ?>
 
 
@@ -49,13 +50,13 @@
                         <span class="txt1">
                             Forgot
                         </span>
-                        <a class="txt2" href="#">
+                        <a class="txt2" href="<?= url("forgot") ?>">
                             Username / Password?
                         </a>
                     </div>
 
                     <div class="text-center p-t-136">
-                        <a class="txt2" href="#">
+                        <a class="txt2" href="<?= url("login") ?>">
                             Login your Account
                             <i class="fa fa-long-arrow-right m-l-5" aria-hidden="true"></i>
                         </a>

@@ -25,8 +25,8 @@
                     <?php
                     $message = flash('forgot_error');
                     if (!empty($message)) : ?>
-                        <div class="mb-2 alert alert-danger"> <small class="form-text text-danger"><?= $message ?></small>
-                        </div>
+                    <div class="mb-2 alert alert-danger"> <small class="form-text text-danger"><?= $message ?></small>
+                    </div>
                     <?php endif; ?>
 
 
@@ -48,7 +48,7 @@
 
 
                     <div class="text-center p-t-136">
-                        <a class="txt2" href="#">
+                        <a class="txt2" href="<?= url("register") ?>">
                             Create your Account
                             <i class="fa fa-long-arrow-right m-l-5" aria-hidden="true"></i>
                         </a>
