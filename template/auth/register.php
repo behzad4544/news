@@ -1,10 +1,12 @@
 <!DOCTYPE html>
 <html lang="en">
 
-<?php
+<head>
+    <title>Register</title>
+    <?php
 
-require_once(BASE_PATH . '/template/auth/layouts/head-tag.php');
-?>
+    require_once(BASE_PATH . '/template/auth/layouts/head-tag.php');
+    ?>
 
 <body>
 

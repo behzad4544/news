@@ -153,4 +153,28 @@ class Auth
             }
         }
     }
+    public function checkAdmin()
+    {
+        if (isset($_SESSION['user'])) {
+            $db = new Database();
+            $user = $db->select('select * from users where id = ?', [$_SESSION['user']])->fetch();
+            if ($user != null) {
+                if ($user['permission'] != 'admin') {
+                    $this->redirect("home");
+                }
+            } else {
+                $this->redirect("home");
+            }
+        } else {
+            $this->redirect("home");
+        }
+    }
+    public function logout()
+    {
+        if (isset($_SESSION['user'])) {
+            unset($_SESSION['user']);
+            session_destroy();
+        }
+        $this->redirect("home");
+    }
 }

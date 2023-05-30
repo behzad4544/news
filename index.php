@@ -273,6 +273,7 @@ uri('activation/{verify_token}', 'Auth\Auth', 'activation');
 uri('activation/{verify_token}', 'Auth\Auth', 'activation');
 uri('login', 'Auth\Auth', 'login');
 uri('check-login', 'Auth\Auth', 'checkLogin', 'POST');
+uri('logout', 'Auth\Auth', 'logout');
 
 //login
 
