@@ -177,4 +177,47 @@ class Auth
         }
         $this->redirect("home");
     }
+    public function forgot()
+    {
+        require_once(BASE_PATH . '/template/auth/forgot.php');
+    }
+
+    public function forgotMessage($username, $forgotToken)
+    {
+        $message = '
+        <h1> فراموشی  رمز عبور </h1>
+        <p>' . $username . ' عزیز برای تغییر رمز عبور خود لطفا روی لینک زیر کلیک نمایید</p> 
+        <div><a href="' . url('reset-password-form/' . $forgotToken) . '">تغییر رمز عبور</a></div>
+        ';
+        return $message;
+    }
+
+    public function forgotRequest($request)
+    {
+        if (empty($request['email'])) {
+            flash('forgot_error', 'ایمیل خالی می باشد');
+            $this->redirectBack();
+        } else if (!filter_var($request['email'], FILTER_VALIDATE_EMAIL)) {
+            flash('forgot_error', 'ایمیل صحیح نمی باشد');
+            $this->redirectBack();
+        } else {
+            $db = new Database();
+            $user = $db->select('select * from users where email = ?', [$request['email']])->fetch();
+            if ($user != null) {
+                $randomToken = $this->random();
+                $forgotMessage = $this->forgotMessage($request['username'], $randomToken);
+                $result = $this->sendMail($request['email'], 'بازیابی رمز عبور', $forgotMessage);
+                if ($result) {
+                    $db->update('users', $user['id'], ['forot_token', 'forgot_token_expire'], [$randomToken, date('Y-m-d H:i:s', strtotime('+15 minutes'))]);
+                    $this->redirect('login');
+                } else {
+                    flash('forgot_error', 'ارسال ایمیل انجام نشد');
+                    $this->redirectBack();
+                }
+            } else {
+                flash('forgot_error', 'ایمیل شما موجود نمی باشد');
+                $this->redirectBack();
+            }
+        }
+    }
 }
