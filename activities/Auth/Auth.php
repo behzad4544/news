@@ -205,10 +205,11 @@ class Auth
             $user = $db->select('select * from users where email = ?', [$request['email']])->fetch();
             if ($user != null) {
                 $randomToken = $this->random();
-                $forgotMessage = $this->forgotMessage($request['username'], $randomToken);
+                $forgotMessage = $this->forgotMessage($user['username'], $randomToken);
                 $result = $this->sendMail($request['email'], 'بازیابی رمز عبور', $forgotMessage);
                 if ($result) {
-                    $db->update('users', $user['id'], ['forot_token', 'forgot_token_expire'], [$randomToken, date('Y-m-d H:i:s', strtotime('+15 minutes'))]);
+                    date_default_timezone_set('Asia/Tehran');
+                    $db->update('users', $user['id'], ['forgot_token', 'forgot_token_expire'], [$randomToken, date('Y-m-d H:i:s', strtotime('+15 minutes'))]);
                     $this->redirect('login');
                 } else {
                     flash('forgot_error', 'ارسال ایمیل انجام نشد');
@@ -218,6 +219,33 @@ class Auth
                 flash('forgot_error', 'ایمیل شما موجود نمی باشد');
                 $this->redirectBack();
             }
+        }
+    }
+    public function resetPasswordView($forgot_token)
+    {
+        require_once(BASE_PATH . '/template/auth/reset-pass.php');
+    }
+    public function resetPassword($request, $forgot_token)
+    {
+        if (!isset($request['password']) || strlen($request['password']) < 8) {
+            flash('reset_error', 'پسورد مورد قبول نیست');
+            $this->redirectBack();
+        } else {
+            $db = new Database();
+            $user = $db->select('select * from users where forgot_token = ? ', [$forgot_token])->fetch();
+        }
+        if ($user != null) {
+            date_default_timezone_set('Asia/Tehran');
+            if ($user['forgot_token_expire'] < date('Y-m-d H:i:s')) {
+                flash('reset_error', 'تاریخ به اتمام رسیده است');
+                $this->redirectBack();
+            } else {
+                $db->update('users', $user['id'], ['password'], [$this->hash($request['password'])]);
+                $this->redirect('login');
+            }
+        } else {
+            flash('reset_error', 'کاربر یافت نشد');
+            $this->redirectBack();
         }
     }
 }

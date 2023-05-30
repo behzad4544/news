@@ -276,6 +276,8 @@ uri('check-login', 'Auth\Auth', 'checkLogin', 'POST');
 uri('logout', 'Auth\Auth', 'logout');
 uri('forgot', 'Auth\Auth', 'forgot');
 uri('forgot/request', 'Auth\Auth', 'forgotRequest', 'POST');
+uri('reset-password-form/{forgot-token}', 'Auth\Auth', 'resetPasswordView');
+uri('reset-password/{forgot-token}', 'Auth\Auth', 'resetPassword', 'POST');
 
 //login
 
